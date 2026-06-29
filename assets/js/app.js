@@ -33,3 +33,25 @@ const mostrarPersonajes=(lista)=>{
         </div>
         `})}
         cargarPersonajes()
+
+const formulario=document.querySelector(`.buscador`)
+const inputBuscador=document.querySelector(`.buscador-input`)
+formulario.addEventListener(`submit`, (e)=>{
+ e.preventDefault()
+ const textoBuscador=inputBuscador.value.toLowerCase().trim()
+if (textoBuscador==='') {
+    mostrarPersonajes(personajes)
+    return
+}
+const buscarPersonaje=personajes.filter(personaje=>{
+const nombrePersonajeBuscado=personaje.name.toLowerCase().trim().includes(textoBuscador)
+return nombrePersonajeBuscado
+})
+if (buscarPersonaje.length===0) {
+contenedor.innerHTML=`
+<div class="col-12 text-center alert alert-warning mt-4">
+ no se encontraron personajes que coincidan con "${inputBuscador.value}".
+</div>
+`} else {
+ mostrarPersonajes(buscarPersonaje)
+}})
