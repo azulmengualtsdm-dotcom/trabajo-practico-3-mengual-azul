@@ -1,9 +1,10 @@
 const api_URL='https://thesimpsonsapi.com/api/characters'
-const api_Individual='https://thesimpsonsapi.com/api/characters/1'
+const api_Individual='https://thesimpsonsapi.com/api/characters/'
 const cdnBase='https://cdn.thesimpsonsapi.com/500'
 let personajes = []
 
 const contenedor = document.querySelector(`#personajes-container`)
+
 
 const cargarPersonajes=async()=>{
     try{
@@ -18,7 +19,7 @@ const cargarPersonajes=async()=>{
 const mostrarPersonajes=(lista)=>{
     contenedor.innerHTML=""
     lista.forEach(personaje=>{
-        const urlImagen=`${cdnBase}${personaje.image}`
+        const urlImagen=`${cdnBase}${personaje.portrait_path}`
         contenedor.innerHTML+=`
         <div class="col-md-4 mb-4">
           <div class="card">
@@ -55,3 +56,56 @@ contenedor.innerHTML=`
 `} else {
  mostrarPersonajes(buscarPersonaje)
 }})
+
+const modalElemento = document.querySelector('#detalleModal')
+const modalInstancia = new bootstrap.Modal(modalElemento)
+modalInstancia.show()
+
+const obtenerUnPersonaje=async (idPersonaje)=>{
+ try {
+  const response=await fetch(`${api_Individual}${idPersonaje}`)
+  const data=await response.json()
+  return data
+ }
+ catch (error){
+  console.log(`error al traer personaje`, error)
+ }
+ 
+}
+
+
+
+
+
+
+contenedor.addEventListener(`click`, async(e)=>{
+  const botonDetalle=e.target.closest(`[data-id]`)
+  if(botonDetalle) {
+    const id=botonDetalle.getAttribute(`data-id`)
+    const unPersonaje=await obtenerUnPersonaje(id)
+
+    const imagenModal=`${cdnBase}${unPersonaje.portrait_path}`
+
+    document.querySelector('#modal-nombre').textContent = unPersonaje.name
+    document.querySelector('#modal-imagen').src = imagenModal
+    document.querySelector('#modal-imagen').alt = unPersonaje.name
+    
+    document.querySelector('#modal-edad').textContent = unPersonaje.age
+    document.querySelector('#modal-nacimiento').textContent = unPersonaje.birthdate
+    document.querySelector('#modal-genero').textContent = unPersonaje.gender
+    document.querySelector('#modal-ocupacion').textContent = unPersonaje.occupation
+    document.querySelector('#modal-estado').textContent = unPersonaje.status
+
+     if (unPersonaje.phrases && unPersonaje.phrases.length>0){
+    document.querySelector(`#modal-frase`).textContent=`${unPersonaje.phrases}`
+  } else {
+    document.querySelector(`#modal-frase`).textContent=`no hay frase para este personaje`
+  }
+  const modalElemento = document.querySelector('#detalleModal')
+const modalInstancia = new bootstrap.Modal(modalElemento)
+modalInstancia.show()
+}
+
+ 
+})
+
