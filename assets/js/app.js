@@ -28,7 +28,7 @@ const mostrarPersonajes=(lista)=>{
               <h5 class="card-title">${personaje.name}</h5>
               <p class="card-text">${personaje.occupation}</p>
               <p class="card-text">${personaje.status}</p>
-              <button data-id="${personaje.id}">Ver detalle</button>
+              <button id="detalleBoton" data-id="${personaje.id}">Ver detalle</button>
             </div>
           </div>
         </div>
@@ -57,9 +57,6 @@ contenedor.innerHTML=`
  mostrarPersonajes(buscarPersonaje)
 }})
 
-const modalElemento = document.querySelector('#detalleModal')
-const modalInstancia = new bootstrap.Modal(modalElemento)
-modalInstancia.show()
 
 const obtenerUnPersonaje=async (idPersonaje)=>{
  try {
